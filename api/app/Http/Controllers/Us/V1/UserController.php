@@ -22,9 +22,24 @@ class UserController extends Controller {
     }
 
     public function create(Request $request) {
-        $data = $request->getContent();
+        $data = $request->all();
 
-        return $this->service->create($data);
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if (!$validator->fails()) {
+            $res = $this->service->create($data);
+            if (!$res) {
+                return response()->json(['success' => false, 'message' => 'Fail to create user'], 400);
+            }
+
+            return response()->json(['success' => true, 'data' => $res]);
+        }
+
+        return response()->json(['success' => false, 'message' => $validator->errors()], 400);
     }
 
     public function login(Request $request) {

@@ -11,9 +11,8 @@ class UserRepository {
         $this->model = $_model;
     }
 
-    public function create(array $data) {
-        return $data;
-        // return $this->model->create($data);
+    public function create($data) {
+        return $this->model->create($data);
     }
 
     public function login(array $data) {

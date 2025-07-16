@@ -9,8 +9,10 @@ Route::prefix('v1')->group(function ($router) {
         'prefix' => 'us'
     ], function ($router) {
         // POST
-        $router->post('/', [UserController::class, 'create']);
-        $router->post('/login', [UserController::class, 'login']);
+        $router->group(['middleware' => ['api', 'auth:api']],  function ($router) {
+            $router->post('/', [UserController::class, 'create']);
+            $router->post('/login', [UserController::class, 'login']);
+        });
 
         // GET
         $router->get('/me', [UserController::class, 'me']);
